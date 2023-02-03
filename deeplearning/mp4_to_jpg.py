@@ -1,6 +1,6 @@
 import cv2
 
-video = cv2.VideoCapture("./test_videos/challenge.mp4")                    # Load the video
+video = cv2.VideoCapture("./test_videos/challenge.mp4")  # fix me # Load the video
 frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))   # Get the number of frames in the video
 frame_number = 0                                         # Set the starting frame number
 
