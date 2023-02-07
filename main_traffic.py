@@ -3,6 +3,7 @@ import Vision.cam_util_func as cam_util
 import Vision.lane_detection as lane_util
 import Vision.traffic_light_detection as tf_util
 import cv2
+import numpy as np
 from datetime import datetime
 
 # MISSION_2 : TRAFFIC LIGHT
@@ -47,6 +48,24 @@ def steer_signal(steer):
         send_command("5", speed=1)
     else:  # stop
         send_command("9", speed=1)
+        
+def color_detection(frame): # fix me
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    green_lower = np.array([40, 40, 40])
+    green_upper = np.array([70, 255, 255])
+    green_mask = cv2.inRange(hsv, green_lower, green_upper)
+    green = cv2.bitwise_and(frame, frame, mask=green_mask)
+    red_lower = np.array([0, 50, 50])
+    red_upper = np.array([10, 255, 255])
+    red_mask = cv2.inRange(hsv, red_lower, red_upper)
+    red = cv2.bitwise_and(frame, frame, mask=red_mask)
+
+    if np.count_nonzero(green_mask) > np.count_nonzero(red_mask):
+        return "Go"
+    elif np.count_nonzero(red_mask) > np.count_nonzero(green_mask):
+        return "Stop"
+    else:
+        return "Unknown"
 
 # MAIN LOOP
 while True:
@@ -80,7 +99,7 @@ while True:
 
     # GET TRAFFIC LIGHT INFO USING frame1
     TRAFFIC_COUNT += 1
-
+    
     if TRAFFIC_COUNT > 100: ### FIX ME
         TRAFFIC = TF.traffic_detection(frame1, sample=16, print_enable=True)
     else:
