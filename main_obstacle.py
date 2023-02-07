@@ -54,6 +54,7 @@ def send_command(command, speed):
         comm.write(command.encode())
         print(datetime.now().timestamp())
         ar_count = 0
+        
 def steer_signal(steer):
     if steer == 'forward':
         send_command("3", speed=1)
