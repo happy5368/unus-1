@@ -48,6 +48,24 @@ def steer_signal(steer):
         send_command("5", speed=1)
     else:  # stop
         send_command("9", speed=1)
+        
+def color_detection(frame):
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    green_lower = np.array([40, 40, 40])
+    green_upper = np.array([70, 255, 255])
+    green_mask = cv2.inRange(hsv, green_lower, green_upper)
+    green = cv2.bitwise_and(frame, frame, mask=green_mask)
+    red_lower = np.array([0, 50, 50])
+    red_upper = np.array([10, 255, 255])
+    red_mask = cv2.inRange(hsv, red_lower, red_upper)
+    red = cv2.bitwise_and(frame, frame, mask=red_mask)
+
+    # if np.count_nonzero(green_mask) > np.count_nonzero(red_mask):
+    #     return "Go"
+    # elif np.count_nonzero(red_mask) > np.count_nonzero(green_mask):
+    #     return "Stop"
+    # else:
+    #     return "Unknown"
 
 # MAIN LOOP
 while True:
