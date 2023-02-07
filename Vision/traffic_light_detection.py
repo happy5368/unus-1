@@ -81,3 +81,5 @@ class libTRAFFIC(object):
             cv2.imshow('Traffic image', replica)
 
         return result
+    
+    
